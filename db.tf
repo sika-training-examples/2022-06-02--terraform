@@ -8,9 +8,13 @@ resource "digitalocean_database_cluster" "postgres" {
 }
 
 resource "digitalocean_database_db" "postgres" {
-  count      = 5
+  count      = 7
   cluster_id = digitalocean_database_cluster.postgres.id
   name       = "db${count.index + 1}"
+
+  provisioner "local-exec" {
+    command = "say Virtual machine has been created"
+  }
 }
 
 resource "digitalocean_database_db" "postgres2" {
