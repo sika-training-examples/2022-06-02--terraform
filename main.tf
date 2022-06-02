@@ -17,6 +17,19 @@ resource "digitalocean_droplet" "example" {
     digitalocean_ssh_key.default-ed25519.id,
     data.digitalocean_ssh_key.paveljirka.id,
   ]
+
+  connection {
+    type = "ssh"
+    user = "root"
+    host = self.ipv4_address
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "apt-get update",
+      "apt-get install -y nginx",
+    ]
+  }
 }
 
 output "ipv4" {
