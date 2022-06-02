@@ -10,5 +10,10 @@ module "vm--ondrejsika-foo" {
 }
 
 output "ondrejsika-foo" {
-  value = module.vm--ondrejsika-foo
+  value = {
+    ip            = module.vm--ondrejsika-foo.ip
+    domain        = module.vm--ondrejsika-foo.domain
+    price_hourly  = module.vm--ondrejsika-foo.digitalocean_droplet.price_hourly
+    price_monthly = module.vm--ondrejsika-foo.digitalocean_droplet.price_monthly
+  }
 }

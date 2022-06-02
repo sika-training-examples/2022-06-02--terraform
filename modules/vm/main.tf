@@ -66,3 +66,11 @@ output "ip" {
 output "domain" {
   value = cloudflare_record.this.hostname
 }
+
+output "digitalocean_droplet" {
+  value = digitalocean_droplet.this
+}
+
+output "cloudflare_record" {
+  value = cloudflare_record.this
+}
