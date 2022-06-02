@@ -16,6 +16,11 @@ module "env--dev" {
   config = local.config
 }
 
+module "env--test" {
+  source = "./env/test"
+  config = local.config
+}
+
 module "env--prod" {
   source = "./env/prod"
   config = local.config
