@@ -26,6 +26,7 @@ resource "digitalocean_droplet" "example" {
 
   provisioner "remote-exec" {
     inline = [
+      "sleep 60",
       "apt-get update",
       "apt-get install -y nginx",
     ]
