@@ -1,17 +1,17 @@
 resource "digitalocean_droplet" "example" {
   for_each = {
     "ondrejsika" = {
-      image = "debian-10-x64"
+      image = local.DEBIAN
     }
     "ondrejsika2" = {
-      image = "ubuntu-22-04-x64"
+      image = local.UBUNTU
     }
   }
 
   image  = each.value.image
   name   = each.key
   region = "fra1"
-  size   = "s-1vcpu-1gb"
+  size   = local.SIZE.SMALL
   ssh_keys = [
     digitalocean_ssh_key.default.id,
     digitalocean_ssh_key.default-ed25519.id,
