@@ -25,9 +25,17 @@ module "vm--db" {
   cloudflare_zone_id = var.config.cloudflare_zone_id
 }
 
+module "vm--s3" {
+  source             = "../../modules/vm"
+  name               = "${var.config.environment}-s3"
+  ssh_keys           = var.config.ssh_keys
+  cloudflare_zone_id = var.config.cloudflare_zone_id
+}
+
 output "ips" {
   value = {
     application = module.vm--application.ip
     db          = module.vm--db.ip
+    s3          = module.vm--s3.ip
   }
 }
