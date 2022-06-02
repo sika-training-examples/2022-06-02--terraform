@@ -22,6 +22,10 @@ resource "digitalocean_ssh_key" "default-ed25519" {
   public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHtI4BsjxWHmRB3EzyQDSX5idgyjD67XL4WmIjz+pcG6 ondrej@sika-mac"
 }
 
+data "digitalocean_ssh_key" "paveljirka" {
+  name = "paveljirka"
+}
+
 resource "digitalocean_droplet" "example" {
   image  = "debian-10-x64"
   name   = "ondrejsika"
@@ -30,6 +34,7 @@ resource "digitalocean_droplet" "example" {
   ssh_keys = [
     digitalocean_ssh_key.default.id,
     digitalocean_ssh_key.default-ed25519.id,
+    data.digitalocean_ssh_key.paveljirka.id,
   ]
 }
 
