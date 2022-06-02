@@ -1,0 +1,46 @@
+image: sikalabs/ci@sha256:71432af7b98f6e92ca99d6d39b568f84ca9766c093e4a7b45ad1191b18f408fd
+
+stages:
+  - validate
+  - plan
+  - apply
+
+cache:
+  paths:
+    - .terraform/
+
+before_script:
+  - cp $TFVARS_FILE main.auto.tfvars
+  - make tf-init-backend
+
+terraform:fmt:
+  stage: validate
+  script:
+    - terraform fmt -check -diff
+
+terraform:validate:
+  stage: validate
+  script:
+    - terraform validate
+
+terraform:plan:
+  stage: plan
+  script:
+    - shopt -s expand_aliases
+    - alias convert_report="jq -r '([.resource_changes[]?.change.actions?]|flatten)|{\"create\":(map(select(.==\"create\"))|length),\"update\":(map(select(.==\"update\"))|length),\"delete\":(map(select(.==\"delete\"))|length)}'"
+    - terraform plan -out=terraform.tfplan
+    - terraform show --json terraform.tfplan | convert_report > plan.json
+  artifacts:
+    paths:
+      - terraform.tfplan
+    reports:
+      terraform: plan.json
+
+terraform:apply:
+  stage: apply
+  when: manual
+  only:
+    - master
+  script:
+    - make tf-init-backend
+    - terraform apply terraform.tfplan
