@@ -5,15 +5,11 @@ resource "digitalocean_droplet" "example" {
     }
   }
 
-  image  = each.value.image
-  name   = each.key
-  region = "fra1"
-  size   = local.SIZE.SMALL
-  ssh_keys = [
-    digitalocean_ssh_key.default.id,
-    digitalocean_ssh_key.default-ed25519.id,
-    data.digitalocean_ssh_key.paveljirka.id,
-  ]
+  image    = each.value.image
+  name     = each.key
+  region   = "fra1"
+  size     = local.SIZE.SMALL
+  ssh_keys = var.config.ssh_keys
 
   connection {
     type = "ssh"
@@ -31,15 +27,11 @@ resource "digitalocean_droplet" "example" {
 }
 
 resource "digitalocean_droplet" "cloud-init" {
-  image  = local.DEBIAN
-  name   = "cloud-init"
-  region = "fra1"
-  size   = local.SIZE.SMALL
-  ssh_keys = [
-    digitalocean_ssh_key.default.id,
-    digitalocean_ssh_key.default-ed25519.id,
-    data.digitalocean_ssh_key.paveljirka.id,
-  ]
+  image     = local.DEBIAN
+  name      = "cloud-init"
+  region    = "fra1"
+  size      = local.SIZE.SMALL
+  ssh_keys  = var.config.ssh_keys
   user_data = <<EOF
 #cloud-config
 ssh_pwauth: yes
