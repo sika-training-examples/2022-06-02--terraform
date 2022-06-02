@@ -3,9 +3,6 @@ resource "digitalocean_droplet" "example" {
     "ondrejsika" = {
       image = local.DEBIAN
     }
-    "ondrejsika2" = {
-      image = local.UBUNTU
-    }
   }
 
   image  = each.value.image
