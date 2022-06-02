@@ -1,6 +1,15 @@
 resource "digitalocean_droplet" "example" {
-  image  = "debian-10-x64"
-  name   = "ondrejsika"
+  for_each = {
+    "ondrejsika" = {
+      image = "debian-10-x64"
+    }
+    "ondrejsika2" = {
+      image = "ubuntu-22-04-x64"
+    }
+  }
+
+  image  = each.value.image
+  name   = each.key
   region = "fra1"
   size   = "s-1vcpu-1gb"
   ssh_keys = [
@@ -11,5 +20,8 @@ resource "digitalocean_droplet" "example" {
 }
 
 output "ipv4" {
-  value = digitalocean_droplet.example.ipv4_address
+  value = [
+    for vm in digitalocean_droplet.example :
+    vm.ipv4_address
+  ]
 }

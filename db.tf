@@ -13,6 +13,15 @@ resource "digitalocean_database_db" "postgres" {
   name       = "db${count.index + 1}"
 }
 
+resource "digitalocean_database_db" "postgres2" {
+  for_each = {
+    foo = null
+    bar = null
+  }
+  cluster_id = digitalocean_database_cluster.postgres.id
+  name       = "db-${each.key}"
+}
+
 output "uri" {
   value     = digitalocean_database_cluster.postgres.uri
   sensitive = true
@@ -20,4 +29,11 @@ output "uri" {
 
 output "dbs" {
   value = digitalocean_database_db.postgres[*].name
+}
+
+output "dbs2" {
+  value = [
+    for db in digitalocean_database_db.postgres2 :
+    db.name
+  ]
 }
